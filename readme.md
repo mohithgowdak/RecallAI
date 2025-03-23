@@ -79,7 +79,7 @@ You’ve set up a FastAPI backend to handle:
 - ✅ **File Uploads**: Users can upload text, audio, and video notes.
 - ✅ **AI Processing**: AI generates insights (summaries) from uploaded notes.
 
-The FastAPI app is working properly, as shown in the [API documentation](/docs).
+The FastAPI app is working properly, as shown in the [API documentation](https://fastapi.tiangolo.com/#check-it).
 
 ---
 
@@ -158,7 +158,7 @@ We would love your contributions! If you are interested in AI, FastAPI, Supabase
 ## 📬 Contact & Discussions
 
 - 💬 **Join the Discussion**: [Issues & Ideas – GitHub Issues](https://github.com/mohithgowdak/RecallAI/issues)
-- 📧 **Reach Out**: [your-email@example.com](mailto:mohi11052003@gmail.com)
+- 📧 **Reach Out**: [mohi11052003@gmail.com](mailto:mohi11052003@gmail.com)
 
 Let’s build the future of memory recall with AI! 🚀🔥
 
