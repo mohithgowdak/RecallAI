@@ -95,31 +95,36 @@ async def upload_note(
         "file_type": file_type,
         "text_content": text_content
     }
-
 # AI Insights (Summarization, Sentiment Analysis)
 import requests
+
 
 @app.post("/generate-insights")
 def generate_insights(ai_request: AIRequest):
     try:
         # Fetch note details from Supabase
-        note_data = supabase.table("notes").select("file_url").eq("id", ai_request.note_id).execute()
+        note_data = supabase.table("notes").select("file_url", "text_content").eq("id", ai_request.note_id).execute()
         if not note_data.data:
             return {"success": False, "message": "Note not found"}
 
-        file_url = note_data.data[0]["file_url"]
+        file_url = note_data.data[0].get("file_url")
+        text_content = note_data.data[0].get("text_content")
 
-        # Download file content
-        response = requests.get(file_url)
-        if response.status_code != 200:
-            return {"success": False, "message": "Failed to download file"}
+        if file_url:  # If a file exists, download and process it
+            response = requests.get(file_url)
+            if response.status_code != 200:
+                return {"success": False, "message": "Failed to download file"}
 
-        file_content = response.content.decode("utf-8", errors="ignore")
+            file_content = response.content.decode("utf-8", errors="ignore")
+
+        elif text_content:  # If no file, process the text content directly
+            file_content = text_content
+
+        else:
+            return {"success": False, "message": "No file or text content found for the note"}
 
         # Process with Gemini AI
-        #model = genai.GenerativeModel("gemini-1.5-pro")  # ✅ Correct model name
         model = genai.GenerativeModel("gemini-1.5-flash")
-
         ai_response = model.generate_content(file_content)
 
         # Store AI insights
@@ -129,6 +134,8 @@ def generate_insights(ai_request: AIRequest):
         }).execute()
 
         return {"success": True, "message": "AI insights generated", "summary": ai_response.text}
+
     except Exception as e:
         return {"success": False, "error": str(e)}
+
 
